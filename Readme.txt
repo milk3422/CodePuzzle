@@ -27,6 +27,11 @@ utilize file redirection they will automatically exit when the end of the file
 is reached.
 
 #
+# Eclipse
+To import in eclipse you will need to run the following command:
+> mvn eclipse:clean eclipse:eclipse
+
+#
 # Project layout
 A few projects are used for the logical division of work and they will be 
 explained in this section.
