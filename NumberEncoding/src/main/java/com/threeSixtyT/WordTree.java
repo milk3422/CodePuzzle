@@ -1,5 +1,7 @@
 package com.threeSixtyT;
 
+import java.util.Set;
+
 public class WordTree {
 
 	private TreeNode rootNode;
@@ -10,20 +12,21 @@ public class WordTree {
 		this.empty = true;
 	}
 	
-	public Boolean isEmpty() {
+	public boolean isEmpty() {
 		return this.empty;
 	}
 	
 	public void add(String value) {
 		
 		if (!value.isEmpty()) {
-			this.insert(value.charAt(0), this.rootNode, value);	
+			this.insert(0, this.rootNode, value);	
 		}
 	}
 	
-	public Boolean contains(String value) {
+	public boolean contains(String value) {
+		
 		if (!value.isEmpty()) {
-			return this.exists(value.charAt(0), this.rootNode, value);
+			return this.exists(0, this.rootNode, value);
 		}
 		
 		return false;
@@ -32,16 +35,32 @@ public class WordTree {
 	
 	private void insert(int currIndex, TreeNode currNode, String value) {
 		
+//		// Get the current character in lower case form
+//		char currChar = value.charAt(currIndex);
+//
+//		if (currIndex == (value.length() - 1)) {
+//			// At the final character need to insert word
+//			// check to see if current 
+//			currNode.setValue(value);
+//			
+//		} else if (currIndex < value.length()) {
+//			
+//			//TODO Check to make sure index is greater than 0
+//			insert(++currIndex, currNode.insert(currChar), value);
+//		}
+		
+
 		if (currIndex < value.length()) {
 			// Get the current character in lower case form
 			char currChar = value.charAt(currIndex);
-
+			
 			//TODO Check to make sure index is greater than 0
 			insert(++currIndex, currNode.insert(currChar), value);
 		}
+		
 	}
 	
-	private Boolean exists(int currIndex, TreeNode currNode, String value) {
+	private boolean exists(int currIndex, TreeNode currNode, String value) {
 		
 		char currChar = value.charAt(currIndex);
 		
@@ -65,24 +84,29 @@ public class WordTree {
 		return currChar - 97;
 	}
 	
+//	public Set<String> keySet() {
+//		
+//	}
 	
 	class TreeNode {
 		private boolean hasChildren;
 		
 		private TreeNode[] children;
-		private char value;
+//		private char value;
+		
+		private String value;
 		
 		public TreeNode() {
 			this.hasChildren = false;
 			this.children = new TreeNode[26];
 		}
 		
-		public TreeNode(char value) {
-			this();
-			this.value = value;
-		}
+//		public TreeNode(char value) {
+//			this();
+//			this.value = value;
+//		}
 		
-		public Boolean contains(char value) {
+		public boolean contains(char value) {
 
 			// Get the index of the character			
 			int index = getCharIndex(value);
@@ -98,7 +122,7 @@ public class WordTree {
 			
 			// If a value is not contained add it
 			if(!this.contains(value)) {
-				this.children[getCharIndex(value)] = new TreeNode(value);
+				this.children[getCharIndex(value)] = new TreeNode();
 			}
 			
 			// Return the TreeNode at the specified location
@@ -107,6 +131,10 @@ public class WordTree {
 		
 		public TreeNode getChild(char value) {
 			return this.children[getCharIndex(value)];
+		}
+		
+		public void setValue(String value) {
+			this.value = value;
 		}
 
 	}
