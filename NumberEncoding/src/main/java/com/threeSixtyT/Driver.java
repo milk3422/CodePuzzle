@@ -1,6 +1,5 @@
 package com.threeSixtyT;
 
-import java.util.TreeMap;
 
 public class Driver {
 
@@ -11,16 +10,22 @@ public class Driver {
 		// New Word Tree
 		WordTree wt = new WordTree();
 		
-		wt.add("abba");
-		wt.add("aa");
+		wt.put("Abba");
+		wt.put("AA");
 		
-		String s1 = "aaa";
+		String s1 = "abba";
 		
 		if (wt.contains(s1)) {
 			System.out.println(s1 + " in Word Tree");
+			System.out.println(wt.get(s1));
 		} else {
 			System.out.println(s1 + " not in Word Tree");
 		}
+		
+		
+		System.out.println(wt.get("Aa"));
+		
+		
 		
 //		displayString(0, "Abba");
 

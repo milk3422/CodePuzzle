@@ -1,6 +1,5 @@
 package com.threeSixtyT;
 
-import java.util.Set;
 
 public class WordTree {
 
@@ -16,24 +15,32 @@ public class WordTree {
 		return this.empty;
 	}
 	
-	public void add(String value) {
+	public void put(String value) {
 		
 		if (!value.isEmpty()) {
-			this.insert(0, this.rootNode, value);	
+			this.put(0, this.rootNode, value);	
 		}
 	}
 	
 	public boolean contains(String value) {
 		
 		if (!value.isEmpty()) {
-			return this.exists(0, this.rootNode, value);
+			return this.contains(0, this.rootNode, value);
 		}
 		
 		return false;
 	}
 	
+	public String get(String value) {
+		if (!value.isEmpty()) {
+			return get(0, this.rootNode, value);
+		}
+		
+		return null;
+	}
 	
-	private void insert(int currIndex, TreeNode currNode, String value) {
+	
+	private void put(int currIndex, TreeNode currNode, String value) {
 		
 //		// Get the current character in lower case form
 //		char currChar = value.charAt(currIndex);
@@ -50,17 +57,28 @@ public class WordTree {
 //		}
 		
 
-		if (currIndex < value.length()) {
+//		if (currIndex < value.length()) {
+//			// Get the current character in lower case form
+//			char currChar = value.charAt(currIndex);
+//			
+//			//TODO Check to make sure index is greater than 0
+//			insert(++currIndex, currNode.insert(currChar), value);
+//		}
+
+		if (currIndex == value.length()) {
+			// If you are at the end of the string insert the value into the final node
+			currNode.setValue(value);
+		} else	if (currIndex < value.length()) {
 			// Get the current character in lower case form
 			char currChar = value.charAt(currIndex);
 			
 			//TODO Check to make sure index is greater than 0
-			insert(++currIndex, currNode.insert(currChar), value);
+			put(++currIndex, currNode.insert(currChar), value);
 		}
-		
+
 	}
 	
-	private boolean exists(int currIndex, TreeNode currNode, String value) {
+	private boolean contains(int currIndex, TreeNode currNode, String value) {
 		
 		char currChar = value.charAt(currIndex);
 		
@@ -68,11 +86,29 @@ public class WordTree {
 			return currNode.contains(currChar);
 		} else if (currIndex < value.length() && currNode.getChild(currChar) != null) {
 			
-			return exists(++currIndex, currNode.getChild(currChar), value);
+			return contains(++currIndex, currNode.getChild(currChar), value);
 
 		}
 		
 		return false;
+	}
+	
+	
+	private String get(int currIndex, TreeNode currNode, String value) {
+
+		
+		if (currIndex == value.length()) {
+			return currNode.getValue();
+		} else if (currIndex < value.length()) {
+			
+			char currChar = value.charAt(currIndex);
+			
+			if (currNode.getChild(currChar) != null) {
+				return get(++currIndex, currNode.getChild(currChar), value);
+			}
+		}
+		
+		return null;
 	}
 	
 	
@@ -89,23 +125,15 @@ public class WordTree {
 //	}
 	
 	class TreeNode {
-		private boolean hasChildren;
 		
 		private TreeNode[] children;
-//		private char value;
 		
 		private String value;
 		
 		public TreeNode() {
-			this.hasChildren = false;
 			this.children = new TreeNode[26];
 		}
-		
-//		public TreeNode(char value) {
-//			this();
-//			this.value = value;
-//		}
-		
+
 		public boolean contains(char value) {
 
 			// Get the index of the character			
@@ -135,6 +163,14 @@ public class WordTree {
 		
 		public void setValue(String value) {
 			this.value = value;
+		}
+		
+		/**
+		 * Get the value being held at the current node
+		 * @return 
+		 */
+		public String getValue() {
+			return this.value;
 		}
 
 	}
