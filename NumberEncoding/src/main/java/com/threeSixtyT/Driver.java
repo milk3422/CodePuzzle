@@ -10,39 +10,25 @@ public class Driver {
 		// New Word Tree
 		WordTree wt = new WordTree();
 		
-		wt.put("Abba");
-		wt.put("AA");
+		wt.put("abtru\"nnig");
+		wt.put("Abtru\"nnigkeit");
+		wt.put("Abtrunnigkeit");
+		wt.put("Abtrunni-gkeit");
 		
-		String s1 = "abba";
+		String s1 = "abtrunnigkeit";
 		
-		if (wt.contains(s1)) {
+		if (wt.containsPrefix(s1)) {
 			System.out.println(s1 + " in Word Tree");
-			System.out.println(wt.get(s1));
+			
+			// Print any matching words
+			for (String word : wt.get(s1)) {
+				System.out.println(word);
+			}
+			
 		} else {
 			System.out.println(s1 + " not in Word Tree");
 		}
 		
-		
-		System.out.println(wt.get("Aa"));
-		
-		
-		
-//		displayString(0, "Abba");
-
 	}
 
-	public static void displayString(int currChar, String value) {
-		if(currChar < value.length()) {
-			
-			// Make sure the character is lower case
-			char curr = Character.toLowerCase(value.charAt(currChar));
-			
-			if(curr < 64) {
-				
-			}
-			
-			System.out.print(value.charAt(currChar));
-			displayString(++currChar, value);
-		}
-	}
 }

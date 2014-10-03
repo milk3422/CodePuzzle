@@ -1,5 +1,8 @@
 package com.threeSixtyT;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class WordTree {
 
@@ -22,7 +25,7 @@ public class WordTree {
 		}
 	}
 	
-	public boolean contains(String value) {
+	public boolean containsPrefix(String value) {
 		
 		if (!value.isEmpty()) {
 			return this.contains(0, this.rootNode, value);
@@ -31,7 +34,9 @@ public class WordTree {
 		return false;
 	}
 	
-	public String get(String value) {
+
+	
+	public Set<String> get(String value) {
 		if (!value.isEmpty()) {
 			return get(0, this.rootNode, value);
 		}
@@ -41,29 +46,6 @@ public class WordTree {
 	
 	
 	private void put(int currIndex, TreeNode currNode, String value) {
-		
-//		// Get the current character in lower case form
-//		char currChar = value.charAt(currIndex);
-//
-//		if (currIndex == (value.length() - 1)) {
-//			// At the final character need to insert word
-//			// check to see if current 
-//			currNode.setValue(value);
-//			
-//		} else if (currIndex < value.length()) {
-//			
-//			//TODO Check to make sure index is greater than 0
-//			insert(++currIndex, currNode.insert(currChar), value);
-//		}
-		
-
-//		if (currIndex < value.length()) {
-//			// Get the current character in lower case form
-//			char currChar = value.charAt(currIndex);
-//			
-//			//TODO Check to make sure index is greater than 0
-//			insert(++currIndex, currNode.insert(currChar), value);
-//		}
 
 		if (currIndex == value.length()) {
 			// If you are at the end of the string insert the value into the final node
@@ -72,7 +54,6 @@ public class WordTree {
 			// Get the current character in lower case form
 			char currChar = value.charAt(currIndex);
 			
-			//TODO Check to make sure index is greater than 0
 			put(++currIndex, currNode.insert(currChar), value);
 		}
 
@@ -94,23 +75,22 @@ public class WordTree {
 	}
 	
 	
-	private String get(int currIndex, TreeNode currNode, String value) {
+	private Set<String> get(int currIndex, TreeNode currNode, String value) {
 
-		
 		if (currIndex == value.length()) {
-			return currNode.getValue();
+			return currNode.getValues();
 		} else if (currIndex < value.length()) {
 			
 			char currChar = value.charAt(currIndex);
 			
 			if (currNode.getChild(currChar) != null) {
+				
 				return get(++currIndex, currNode.getChild(currChar), value);
 			}
 		}
 		
 		return null;
 	}
-	
 	
 	public static int getCharIndex(char value) {
 		// Get the current character in lower case form
@@ -120,15 +100,26 @@ public class WordTree {
 		return currChar - 97;
 	}
 	
-//	public Set<String> keySet() {
-//		
-//	}
+	public static boolean isValidChar(char value) {
+		int index = getCharIndex(value);
+		
+		// Make sure the index is within range
+		if (index >=0 && index <26) {
+			return true;
+		}
+
+		return false;
+	}
+	
+
 	
 	class TreeNode {
 		
 		private TreeNode[] children;
 		
 		private String value;
+		
+		private Set<String> values;
 		
 		public TreeNode() {
 			this.children = new TreeNode[26];
@@ -139,7 +130,8 @@ public class WordTree {
 			// Get the index of the character			
 			int index = getCharIndex(value);
 			
-			if (children[index] != null) {
+			// Make sure the index is within range
+			if (isValidChar(value) && children[index] != null) {
 				return true;
 			}
 			
@@ -148,8 +140,9 @@ public class WordTree {
 		
 		public TreeNode insert(char value) {
 			
-			// If a value is not contained add it
-			if(!this.contains(value)) {
+			if (!isValidChar(value)) {
+				return this;
+			} else if(!this.contains(value)) {
 				this.children[getCharIndex(value)] = new TreeNode();
 			}
 			
@@ -162,7 +155,14 @@ public class WordTree {
 		}
 		
 		public void setValue(String value) {
-			this.value = value;
+			
+			if (this.values == null) {
+				this.values = new HashSet<String>();
+			}
+			
+			this.values.add(value);
+			
+//			this.value = value;
 		}
 		
 		/**
@@ -171,6 +171,15 @@ public class WordTree {
 		 */
 		public String getValue() {
 			return this.value;
+		}
+		
+		// return a copy so it can't be altered
+		public Set<String> getValues() {
+			if (this.values == null) {
+				// Return an empty set if no value exists
+				return new HashSet<String>();
+			}
+			return new HashSet<String>(this.values);
 		}
 
 	}
