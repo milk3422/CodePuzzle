@@ -75,6 +75,27 @@ public class Side {
 		return true;		
 	}
 	
+	public boolean matchesEdge(Edge edgeType, Boolean[] edgeToCompare, Boolean inverted) {
+		Boolean[] thisSideEdge = this.getEdge(edgeType);
+		
+		if (inverted) {
+			for (int i=0; i < this.dimension/2; i++) {
+				Boolean tmp = thisSideEdge[this.dimension - (1+i)];
+				thisSideEdge[this.dimension - (1+i)] = thisSideEdge[i];
+				thisSideEdge[i] = tmp;
+			}
+		}
+		
+		for (int i=0; i< this.dimension; i++) {
+			if (thisSideEdge[i] & edgeToCompare[i]) {
+				return false;
+			}
+		}
+
+		return true;		
+	}
+	
+	
 
 	public Boolean[] getEdge(Edge edgeType) {
 		
