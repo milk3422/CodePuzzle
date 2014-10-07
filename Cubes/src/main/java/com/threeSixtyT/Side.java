@@ -14,6 +14,7 @@ public class Side {
 	private Boolean[][] side;
 	private int dimension;
 	private int numSupportedRotations;
+	private boolean flipAllowed;
 	
 	
 	public Side(String[] side) {
@@ -22,6 +23,7 @@ public class Side {
 		// Get the dimensions for the side
 		this.dimension = side.length;
 		this.numSupportedRotations = DEFAULT_NUM_ROTATIONS;
+		this.flipAllowed = true;
 		
 		// Initialize the side
 		this.side = new Boolean[this.dimension][this.dimension];
@@ -45,6 +47,10 @@ public class Side {
 			
 			this.numSupportedRotations = 1;
 		}
+		
+		if (this.containsHorizontalReflection() || this.containsVerticalReflection()) {
+			this.flipAllowed = false;
+		}
 
 	}
 	
@@ -64,27 +70,42 @@ public class Side {
 	public void rotateRight() {
 		
 		// Initialize the side
-		Boolean[][] newSide = new Boolean[this.dimension][this.dimension];
+		Boolean[][] rotatedEdge = new Boolean[this.dimension][this.dimension];
 		
 		// Print the values
 		for (int x=0; x < this.dimension; x++) {
 			for (int y=0; y < this.dimension; y++) {
-				newSide[x][y] = this.side[this.dimension - y -1][x];				
+				rotatedEdge[x][y] = this.side[this.dimension - y -1][x];				
 			}
 		}
 		
 		// Copy new side into this side
 		for (int x=0; x < this.dimension; x++) {
 			for (int y=0; y < this.dimension; y++) {
-				this.side[x][y] = newSide[x][y];				
+				this.side[x][y] = rotatedEdge[x][y];				
 			}
 		}
 	}
+	
+	
+	public void flip() {
+
+		// Invert the value
+		for (int x=0; x < this.dimension; x++) {
+			invertEdge(this.side[x]);
+		}
+	}
+	
+	
 	
 	public int getNumSupportedRotations() {
 		return this.numSupportedRotations;
 	}
 
+	public boolean isFlipAllowed() {
+		return this.flipAllowed;
+	}
+	
 	public boolean equalsEdge(Edge edgeType, Boolean[] edgeToCompare) {
 		return this.equalsEdge(edgeType, edgeToCompare, false);
 	}
@@ -164,6 +185,35 @@ public class Side {
 		}
 		
 		return edge;		
+	}
+	
+	
+	private boolean containsVerticalReflection() {
+		
+		// Check for a reflection on the vertical axis
+		for (int y=0; y < this.dimension/2; y++) {
+			for (int x=0; x < this.dimension; x++) {
+				if (this.side[y][x] ^ this.side[y][this.dimension - (x+1)]) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private boolean containsHorizontalReflection() {
+		
+		// Check for a reflection on the vertical axis
+		for (int x=0; x < this.dimension/2; x++) {
+			for (int y=0; y < this.dimension; y++) {
+				if (this.side[y][x] ^ this.side[this.dimension - (y+1)][x]) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 }

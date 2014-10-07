@@ -48,7 +48,9 @@ public class Cube {
 
 		remainingSides.addAll(sides);
 		
-		solve(potentialSolution, remainingSides, 0);
+		findValidFirstSide(potentialSolution, remainingSides, 0, false);
+		
+//		solve(potentialSolution, remainingSides, 0);
 		
 	}
 	
@@ -65,44 +67,50 @@ public class Cube {
 		// 
 		if (potentialSolution.size() == 0) {
 			
-			// Remove the first side from the remaining sides and put it in the potential solutions
-			potentialSolution.add(remainingSides.remove(0));
+			solveFirstSide(potentialSolution, remainingSides, 0, false);
 			
-			for (int i=0; i <= potentialSolution.get(0).getNumSupportedRotations(); i++) {
-//				//TODO remove
-//				System.out.println("Side 1");
-//				potentialSolution.get(0).display();
-				
-				solve(potentialSolution, remainingSides, 0);
-
-				potentialSolution.get(0).rotateRight();
-			}
+//			// Remove the first side from the remaining sides and put it in the potential solutions
+//			potentialSolution.add(remainingSides.remove(0));
+//			
+//			for (int i=0; i <= potentialSolution.get(0).getNumSupportedRotations(); i++) {
+////				//TODO remove
+////				System.out.println("Side 1");
+////				potentialSolution.get(0).display();
+//				
+//				solve(potentialSolution, remainingSides, 0);
+//				
+//				// Rotate the shape to its right
+//				potentialSolution.get(0).rotateRight();
+//			}
 		} else if (potentialSolution.size() == 1) {
 			
-			// Iterate over all of the indices and rotate for every side
-			for (int i=0; i < remainingSides.size(); i++) {
-	
-				potentialSolution.add(remainingSides.remove(i));
-				
-				// Rotate to tests out every side
-				for (int j=0; j <= potentialSolution.get(1).getNumSupportedRotations(); j++) {
-					
-					
-					// If a match 
-					if (potentialSolution.get(0).matchesEdge(Edge.BOTTOM,
-							potentialSolution.get(1).getEdge(Edge.TOP))) {
-						
-//						//TODO display matching shapes
-//						System.out.println("Side 2");
-//						potentialSolution.get(1).display();
-						
-						solve(potentialSolution, remainingSides, 0);
-					}					
-					potentialSolution.get(1).rotateRight();
-				}
-				
-				remainingSides.add(i, potentialSolution.remove(1));				
-			}
+			solveSecondSide(potentialSolution, remainingSides, 0, 0, false);
+			
+			
+//			// Iterate over all of the indices and rotate for every side
+//			for (int i=0; i < remainingSides.size(); i++) {
+//	
+//				potentialSolution.add(remainingSides.remove(i));
+//				
+//				// Rotate to tests out every side
+//				for (int j=0; j <= potentialSolution.get(1).getNumSupportedRotations(); j++) {
+//					
+//					
+//					// If a match 
+//					if (potentialSolution.get(0).matchesEdge(Edge.BOTTOM,
+//							potentialSolution.get(1).getEdge(Edge.TOP))) {
+//						
+////						//TODO display matching shapes
+////						System.out.println("Side 2");
+////						potentialSolution.get(1).display();
+//						
+//						solve(potentialSolution, remainingSides, 0);
+//					}					
+//					potentialSolution.get(1).rotateRight();
+//				}
+//				
+//				remainingSides.add(i, potentialSolution.remove(1));				
+//			}
 		} else if (potentialSolution.size() == 2) {
 			
 			// Iterate over all of the indices and rotate for every side
@@ -223,6 +231,181 @@ public class Cube {
 			
 			remainingSides.add(0, potentialSolution.remove(5));	
 		}
+	}
+	
+	private void solveFirstSide(List<Side> potentialSolution, List<Side> remainingSides, int numRotation, boolean hasFlipped) {
+		// Remove the first side from the remaining sides and put it in the potential solutions
+		potentialSolution.add(remainingSides.remove(0));
+		
+		
+		solve(potentialSolution, remainingSides, 0);
+		
+		if (numRotation < potentialSolution.get(0).getNumSupportedRotations()) {
+			// Rotate the shape to its right
+			potentialSolution.get(0).rotateRight();
+			
+			solveFirstSide(potentialSolution, remainingSides, ++numRotation, hasFlipped);
+		} else if (!hasFlipped && potentialSolution.get(0).isFlipAllowed()) {
+			
+			// Flip
+			potentialSolution.get(0).flip();
+			
+			solveFirstSide(potentialSolution, remainingSides, 0, true);
+		}
+	}
+	
+	private void solveSecondSide(List<Side> potentialSolution, List<Side> remainingSides, int index, int numRotation, boolean hasFlipped) {
+		
+		if (index >= remainingSides.size()) {
+			return;
+		}
+			
+		
+		// If a match 
+		
+		if (potentialSolution.get(0).matchesEdge(Edge.BOTTOM,
+				remainingSides.get(index).getEdge(Edge.TOP))) {
+			
+			potentialSolution.add(remainingSides.remove(index));
+			solve(potentialSolution, remainingSides, 0);
+			remainingSides.add(index, potentialSolution.remove(1));		
+
+		}
+		
+		if (numRotation < remainingSides.get(index).getNumSupportedRotations()) {
+			// Rotate the shape to its right
+			remainingSides.get(index).rotateRight();
+			
+			solveSecondSide(potentialSolution, remainingSides, index, ++numRotation, hasFlipped);			
+		} else if (!hasFlipped && remainingSides.get(index).isFlipAllowed()) {
+			
+			// Flip
+			remainingSides.get(index).flip();
+			
+			solveSecondSide(potentialSolution, remainingSides, index, 0, true);
+		} else {
+			// increase the index
+			solveSecondSide(potentialSolution, remainingSides, ++index, 0, false);
+		}
+	
+	}
+	
+	private void findValidFirstSide(List<Side> potentialSolution, List<Side> remainingSides, int numRotation, boolean hasFlipped) {
+		
+		
+		if (potentialSolution.isEmpty()) {
+			potentialSolution.add(remainingSides.remove(0));
+			findValidSide(potentialSolution, remainingSides, 1, 0, 0, false);
+			
+			remainingSides.add(0, potentialSolution.remove(0));
+			
+		}
+		
+		if (numRotation < remainingSides.get(0).getNumSupportedRotations()) {
+			// Rotate the shape to its right
+			remainingSides.get(0).rotateRight();
+			
+			findValidFirstSide(potentialSolution, remainingSides, numRotation + 1, false);
+		} else if (!hasFlipped && remainingSides.get(0).isFlipAllowed()) {
+			
+			// Flip
+			remainingSides.get(0).flip();
+
+			findValidFirstSide(potentialSolution, remainingSides, 0, true);
+		}
+	}
+	
+	
+	
+	
+	private void findValidSide(List<Side> potentialSolution, List<Side> remainingSides, int currPosition, int index, int numRotation, boolean hasFlipped) {
+		
+		
+		if (currPosition == NUM_SIDES) {
+			System.out.println("Solution Found");
+			for (Side currSide: potentialSolution) {
+				currSide.display();
+			}
+		}
+		
+		if (index >= remainingSides.size()) {
+			return;
+		}
+			
+		
+//		//TODO debug
+//		if (currPosition == 2) {
+//			//TODO display matching shapes
+//			System.out.println("currSide");
+//			remainingSides.get(index).display();
+//			
+//		}
+		
+		
+		// If a match 
+		if (sidesMatch(currPosition, potentialSolution, remainingSides.get(index))) {
+			
+			potentialSolution.add(remainingSides.remove(index));
+			findValidSide(potentialSolution, remainingSides, currPosition+1, 0, 0, false);			
+			remainingSides.add(index, potentialSolution.remove(currPosition));
+		}
+		
+		// If no match rotate the shape
+		if (numRotation < remainingSides.get(index).getNumSupportedRotations()) {
+			// Rotate the shape to its right
+			remainingSides.get(index).rotateRight();
+			
+			findValidSide(potentialSolution, remainingSides, currPosition, index, numRotation+1, hasFlipped);		
+			
+			// Rotate back to the original position
+			remainingSides.get(index).rotateRight();
+
+		} else if (!hasFlipped && remainingSides.get(index).isFlipAllowed()) {
+			
+			// Flip
+			remainingSides.get(index).flip();
+			findValidSide(potentialSolution, remainingSides, currPosition, index, 0, true);			
+
+			//TODO maybe want to flip back??
+			// Flip
+			remainingSides.get(index).flip();
+			
+		} else {
+			// increase the index
+			findValidSide(potentialSolution, remainingSides, currPosition, index+1, 0, false);			
+		}
+	
+	}
+	
+	
+	
+	
+	
+	
+	private boolean sidesMatch(int currPosition, List<Side> potentialSolution, Side currSide) {
+		
+		if (currPosition == 0) {
+			// No comparison needs to be done
+			return true;
+		} else if (currPosition == 1 || currPosition == 2) {
+			return potentialSolution.get(currPosition-1).
+					matchesEdge(Edge.BOTTOM,currSide.getEdge(Edge.TOP));
+		} else if (currPosition == 3) {
+			return currSide.matchesEdge(Edge.TOP, potentialSolution.get(2).getEdge(Edge.BOTTOM))
+				&& currSide.matchesEdge(Edge.BOTTOM, potentialSolution.get(0).getEdge(Edge.TOP));
+		} else if (currPosition == 4) {
+			return currSide.matchesEdge(Edge.RIGHT, potentialSolution.get(3).getEdge(Edge.LEFT))
+					&& currSide.matchesEdge(Edge.TOP, potentialSolution.get(2).getEdge(Edge.LEFT))
+					&& currSide.matchesEdge(Edge.LEFT, potentialSolution.get(1).getEdge(Edge.LEFT), true)
+					&& currSide.matchesEdge(Edge.BOTTOM, potentialSolution.get(0).getEdge(Edge.LEFT), true);
+		} else if (currPosition == 5) {
+			return currSide.matchesEdge(Edge.LEFT, potentialSolution.get(3).getEdge(Edge.RIGHT))
+					&& currSide.matchesEdge(Edge.TOP, potentialSolution.get(2).getEdge(Edge.RIGHT))
+					&& currSide.matchesEdge(Edge.RIGHT, potentialSolution.get(1).getEdge(Edge.RIGHT), true)
+					&& currSide.matchesEdge(Edge.BOTTOM, potentialSolution.get(0).getEdge(Edge.RIGHT), true);
+		}
+		
+		return false;
 	}
 	
 	
