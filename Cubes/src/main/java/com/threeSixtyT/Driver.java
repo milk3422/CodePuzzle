@@ -61,7 +61,7 @@ public class Driver {
 		
 		Cube cube = new Cube(inputCube);
 
-//		cube.displayCube();
+
 		cube.solve();
 
 	}
