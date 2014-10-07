@@ -9,12 +9,19 @@ public class Side {
 		TOP, BOTTOM, RIGHT, LEFT
 	}
 	
+	private static final int DEFAULT_NUM_ROTATIONS = 3;
+	
 	private Boolean[][] side;
 	private int dimension;
+	private int numSupportedRotations;
 	
 	
 	public Side(String[] side) {
+		
+
+		// Get the dimensions for the side
 		this.dimension = side.length;
+		this.numSupportedRotations = DEFAULT_NUM_ROTATIONS;
 		
 		// Initialize the side
 		this.side = new Boolean[this.dimension][this.dimension];
@@ -25,6 +32,20 @@ public class Side {
 				this.side[x][y] = (side[x].charAt(y) == '1') ? true: false;
 			}
 		}
+		
+		// Determine if the shape has a reflection to limit the number of rotations
+		if (this.equalsEdge(Edge.TOP, this.getEdge(Edge.RIGHT)) 
+				&& this.equalsEdge(Edge.RIGHT, this.getEdge(Edge.BOTTOM), true)
+				&& this.equalsEdge(Edge.BOTTOM, this.getEdge(Edge.LEFT)) 
+				&& this.equalsEdge(Edge.LEFT, this.getEdge(Edge.TOP), true)) {
+			this.numSupportedRotations = 0;
+		} else if (this.equalsEdge(Edge.TOP, this.getEdge(Edge.BOTTOM), true) 
+				&& this.equalsEdge(Edge.LEFT, this.getEdge(Edge.RIGHT), true)) {
+			// if top == bottom and left == right
+			
+			this.numSupportedRotations = 1;
+		}
+
 	}
 	
 
@@ -60,30 +81,42 @@ public class Side {
 		}
 	}
 	
+	public int getNumSupportedRotations() {
+		return this.numSupportedRotations;
+	}
 
+	public boolean equalsEdge(Edge edgeType, Boolean[] edgeToCompare) {
+		return this.equalsEdge(edgeType, edgeToCompare, false);
+	}
 	
 	
-	public boolean matchesEdge(Edge edgeType, Boolean[] edgeToCompare) {
+	private boolean equalsEdge(Edge edgeType, Boolean[] edgeToCompare, boolean invert) {
+		
 		Boolean[] thisSideEdge = this.getEdge(edgeType);
 		
+		if (invert) {
+			thisSideEdge = invertEdge(thisSideEdge);
+		}
+		
 		for (int i=0; i< this.dimension; i++) {
-			if (thisSideEdge[i] & edgeToCompare[i]) {
+			if (thisSideEdge[i] ^ edgeToCompare[i]) {
 				return false;
 			}
 		}
 
 		return true;		
 	}
+
+
+	public boolean matchesEdge(Edge edgeType, Boolean[] edgeToCompare) {
+		return this.matchesEdge(edgeType, edgeToCompare, false);
+	}
 	
-	public boolean matchesEdge(Edge edgeType, Boolean[] edgeToCompare, Boolean inverted) {
+	public boolean matchesEdge(Edge edgeType, Boolean[] edgeToCompare, Boolean invert) {
 		Boolean[] thisSideEdge = this.getEdge(edgeType);
 		
-		if (inverted) {
-			for (int i=0; i < this.dimension/2; i++) {
-				Boolean tmp = thisSideEdge[this.dimension - (1+i)];
-				thisSideEdge[this.dimension - (1+i)] = thisSideEdge[i];
-				thisSideEdge[i] = tmp;
-			}
+		if (invert) {
+			thisSideEdge = invertEdge(thisSideEdge);
 		}
 		
 		for (int i=0; i< this.dimension; i++) {
@@ -109,18 +142,28 @@ public class Side {
 				for (int i=0; i < this.dimension; i++) {
 					rightEdge[i] = this.side[i][dimension-1];
 				}
-				
 				return rightEdge;
 			case LEFT:
 				Boolean[] leftEdge = new Boolean[this.dimension];
 				for (int i=0; i < this.dimension; i++) {
 					leftEdge[i] = this.side[i][0];
 				}
-				
 				return leftEdge;
 			default:
 				return new Boolean[0];
 		
 		}
 	}
+	
+	private Boolean[] invertEdge(Boolean[] edge) {
+
+		for (int i=0; i < edge.length/2; i++) {
+			Boolean tmp = edge[edge.length - (1+i)];
+			edge[edge.length - (1+i)] = edge[i];
+			edge[i] = tmp;
+		}
+		
+		return edge;		
+	}
+	
 }

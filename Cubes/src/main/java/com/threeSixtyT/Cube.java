@@ -59,24 +59,22 @@ public class Cube {
 			for (Side currSide: potentialSolution) {
 				currSide.display();
 			}
-
 		}
 		
-		int numRotations = 4;
 		
 		// 
 		if (potentialSolution.size() == 0) {
+			
 			// Remove the first side from the remaining sides and put it in the potential solutions
 			potentialSolution.add(remainingSides.remove(0));
 			
-			for (int i=0; i < numRotations; i++) {
+			for (int i=0; i <= potentialSolution.get(0).getNumSupportedRotations(); i++) {
 //				//TODO remove
 //				System.out.println("Side 1");
 //				potentialSolution.get(0).display();
 				
 				solve(potentialSolution, remainingSides, 0);
-				//TODO remove
-//				System.out.println("Rotating first side right");
+
 				potentialSolution.get(0).rotateRight();
 			}
 		} else if (potentialSolution.size() == 1) {
@@ -87,7 +85,7 @@ public class Cube {
 				potentialSolution.add(remainingSides.remove(i));
 				
 				// Rotate to tests out every side
-				for (int j=0; j < numRotations; j++) {
+				for (int j=0; j <= potentialSolution.get(1).getNumSupportedRotations(); j++) {
 					
 					
 					// If a match 
@@ -99,9 +97,7 @@ public class Cube {
 //						potentialSolution.get(1).display();
 						
 						solve(potentialSolution, remainingSides, 0);
-					}
-					
-//					System.out.println("Rotating second side right");
+					}					
 					potentialSolution.get(1).rotateRight();
 				}
 				
@@ -115,7 +111,7 @@ public class Cube {
 				potentialSolution.add(remainingSides.remove(i));
 				
 				// Rotate to tests out every side
-				for (int j=0; j < numRotations; j++) {
+				for (int j=0; j <= potentialSolution.get(2).getNumSupportedRotations(); j++) {
 					
 					
 					// If a match 
@@ -143,7 +139,7 @@ public class Cube {
 				potentialSolution.add(remainingSides.remove(i));
 				
 				// Rotate to tests out every side
-				for (int j=0; j < numRotations; j++) {
+				for (int j=0; j <= potentialSolution.get(3).getNumSupportedRotations(); j++) {
 					
 					
 					// The 4th side must match the bottom edge of side 3
@@ -173,7 +169,7 @@ public class Cube {
 				potentialSolution.add(remainingSides.remove(i));
 				
 				// Rotate to tests out every side
-				for (int j=0; j < numRotations; j++) {
+				for (int j=0; j <= potentialSolution.get(4).getNumSupportedRotations(); j++) {
 					
 					
 					// The right edge of 5 must match the left edge of 4
@@ -202,7 +198,7 @@ public class Cube {
 			potentialSolution.add(remainingSides.remove(0));
 			
 			// Rotate to tests out every side
-			for (int j=0; j < numRotations; j++) {
+			for (int j=0; j <= potentialSolution.get(5).getNumSupportedRotations(); j++) {
 				
 				
 				// The right edge of 5 must match the left edge of 4
@@ -227,8 +223,6 @@ public class Cube {
 			
 			remainingSides.add(0, potentialSolution.remove(5));	
 		}
-		
-		
 	}
 	
 	
