@@ -25,11 +25,23 @@ public class Driver {
 		
 		PhoneNumberDictionary pnd = new PhoneNumberDictionary(NUMBER_MAPPING);
 		
-		pnd.put("hello");
+		pnd.put("b");
+		pnd.put("ab");
+		pnd.put("a");
+		pnd.put("ba");
 		
-		for (String word: pnd.get("90888")) {
-			System.out.println("Found: " + word);
-		}
+//		for (String word: pnd.get("5")) {
+//			System.out.println("Found: " + word);
+//		}
+//		
+//		for (String word: pnd.get("57")) {
+//			System.out.println("Found: " + word);
+//		}
+
+		PhoneNumber num = new PhoneNumber(pnd);
+		
+		num.decode("05759");
+		
 		
 		
 //		WordTree dictionary;

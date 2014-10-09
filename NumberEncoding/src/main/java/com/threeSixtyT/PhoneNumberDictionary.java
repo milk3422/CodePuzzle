@@ -54,13 +54,12 @@ public class PhoneNumberDictionary {
 	}
 	
 	public List<String> get(String value) {
-		List<String> values = this.dictionary.get(value);
 		
-		if (values == null) {
-			return new LinkedList<String>();
-		}
-		
-		return values;
+		return this.dictionary.get(value);
+	}
+	
+	public boolean contains(String value) {
+		return this.dictionary.containsKey(value);
 	}
 	
 }
