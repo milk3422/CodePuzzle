@@ -63,31 +63,13 @@ public class Driver {
 		PhoneNumber num = new PhoneNumber(pnd);
 		
 		for (String currNum: numbers) {
-			num.decode(currNum);
+			for (List<String> solution : num.decode(currNum) ) {
+				PhoneNumber.displaySolutions(currNum, solution);
+			}
 		}
 		
 		
-//		pnd.put("b");
-//		pnd.put("b\"");
-//		pnd.put("A\"B");
-//		pnd.put("a");
-//		pnd.put("a\"");
-//		pnd.put("ba");
-//		pnd.put("z");
-//		pnd.put("ac");
-		
-//		for (String word: pnd.get("5")) {
-//			System.out.println("Found: " + word);
-//		}
-//		
-//		for (String word: pnd.get("57")) {
-//			System.out.println("Found: " + word);
-//		}
 
-//		PhoneNumber num = new PhoneNumber(pnd);
-//		
-//		num.decode("0-");
-		
 		
 		
 //		WordTree dictionary;

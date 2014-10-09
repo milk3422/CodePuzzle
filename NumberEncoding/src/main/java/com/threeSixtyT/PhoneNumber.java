@@ -1,5 +1,6 @@
 package com.threeSixtyT;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,12 +11,17 @@ public class PhoneNumber {
 		this.pnd = dictionary;
 	}
 
-	public void decode(String number) {
-		this.decode(number, number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>());
+	public List<List<String>> decode(String number) {
+		List<List<String>> solutions = new LinkedList<List<String>>();
+		
+		
+		this.decode(number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>(), solutions);
+		
+		return solutions;
 	}
 
-	private void decode(String rawNumber, String encoding, int startPosition, int currPosition,
-			boolean prevDigitDecoded, LinkedList<String> decodings) {
+	private void decode(String encoding, int startPosition, int currPosition,
+			boolean prevDigitDecoded, LinkedList<String> decodings, List<List<String>> solutions) {
 
 		
 		List<String> decoding;
@@ -23,7 +29,9 @@ public class PhoneNumber {
 		if (startPosition >= encoding.length()) {
 			// start is past end of string
 			// Display solution
-			this.displaySolution(rawNumber, decodings);
+			solutions.add(new ArrayList<String>(decodings));
+			
+//			this.displaySolution(rawNumber, decodings);
 
 		} else if (currPosition >= encoding.length()) {
 			
@@ -34,8 +42,10 @@ public class PhoneNumber {
 					// Add solution to decodings
 					decodings.add(currDecoding);
 
+					
+					solutions.add(new ArrayList<String>(decodings));
 					// Display solution
-					this.displaySolution(rawNumber, decodings);
+//					this.displaySolution(rawNumber, decodings);
 					
 					// remove the last encoding
 					decodings.removeLast();				
@@ -48,7 +58,7 @@ public class PhoneNumber {
 				
 				// call 
 				// Need to add solution 
-				this.decode(rawNumber, encoding, startPosition+1, startPosition+2, false, decodings);
+				this.decode(encoding, startPosition+1, startPosition+2, false, decodings, solutions);
 				
 				// Remove the last encoding
 				decodings.removeLast();
@@ -65,26 +75,25 @@ public class PhoneNumber {
 					decodings.add(currDecoding);
 
 					// 
-					this.decode(rawNumber, encoding, currPosition, currPosition+1, true, decodings);
+					this.decode(encoding, currPosition, currPosition+1, true, decodings, solutions);
 					
 					// Remove the last encoding
 					decodings.removeLast();
 				
 				}
 				
-				this.decode(rawNumber, encoding, startPosition, currPosition+1, false, decodings);
+				this.decode(encoding, startPosition, currPosition+1, false, decodings, solutions);
 				
 			} else {
 				// Need to add solution 
-				this.decode(rawNumber, encoding, startPosition, currPosition+1, prevDigitDecoded, decodings);				
+				this.decode(encoding, startPosition, currPosition+1, prevDigitDecoded, decodings, solutions);				
 			}
 			
 		}
 		
 	}
 	
-	
-	private void displaySolution(String rawNumber, List<String> decodings) {
+	public static void displaySolutions(String rawNumber, List<String> decodings) {
 		System.out.print(rawNumber + ": ");
 		
 		StringBuilder result = new StringBuilder();
