@@ -25,14 +25,56 @@ public class Driver {
 		
 		PhoneNumberDictionary pnd = new PhoneNumberDictionary(NUMBER_MAPPING);
 		
-		pnd.put("b");
-		pnd.put("b\"");
-		pnd.put("A\"B");
-		pnd.put("a");
-		pnd.put("a\"");
-		pnd.put("ba");
-		pnd.put("z");
-		pnd.put("ac");
+		pnd.put("an");
+		pnd.put("blau");
+		pnd.put("Bo\"");
+		pnd.put("Boot");
+		pnd.put("bo\"s");
+		pnd.put("da");
+		pnd.put("Fee");
+		pnd.put("fern");
+		pnd.put("Fest");
+		pnd.put("fort");
+		pnd.put("je");
+		pnd.put("jemand");
+		pnd.put("mir");
+		pnd.put("Mix");
+		pnd.put("Mixer");
+		pnd.put("Name");
+		pnd.put("neu");
+		pnd.put("o\"d");
+		pnd.put("Ort");
+		pnd.put("so");
+		pnd.put("Tor");
+		pnd.put("Torf");
+		pnd.put("Wasser");
+
+
+		List<String> numbers = new LinkedList<String>();
+		numbers.add("112");
+		numbers.add("5624-82");
+		numbers.add("4824");
+		numbers.add("0721/608-4067");
+		numbers.add("10/783--5");
+		numbers.add("1078-913-5");
+		numbers.add("381482");
+		numbers.add("04824");
+	
+		PhoneNumber num = new PhoneNumber(pnd);
+		
+		for (String currNum: numbers) {
+			num.decode(currNum);
+		}
+		
+		
+//		pnd.put("b");
+//		pnd.put("b\"");
+//		pnd.put("A\"B");
+//		pnd.put("a");
+//		pnd.put("a\"");
+//		pnd.put("ba");
+//		pnd.put("z");
+//		pnd.put("ac");
 		
 //		for (String word: pnd.get("5")) {
 //			System.out.println("Found: " + word);
@@ -42,9 +84,9 @@ public class Driver {
 //			System.out.println("Found: " + word);
 //		}
 
-		PhoneNumber num = new PhoneNumber(pnd);
-		
-		num.decode("0-");
+//		PhoneNumber num = new PhoneNumber(pnd);
+//		
+//		num.decode("0-");
 		
 		
 		
