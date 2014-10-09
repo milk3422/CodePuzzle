@@ -1,8 +1,9 @@
 package com.threeSixtyT;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class PhoneNumber {
 	private PhoneNumberDictionary pnd;
@@ -11,8 +12,8 @@ public class PhoneNumber {
 		this.pnd = dictionary;
 	}
 
-	public List<List<String>> decode(String number) {
-		List<List<String>> solutions = new LinkedList<List<String>>();
+	public Set<String> decode(String number) {
+		Set<String> solutions = new HashSet<String>();
 		
 		
 		this.decode(number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>(), solutions);
@@ -21,7 +22,7 @@ public class PhoneNumber {
 	}
 
 	private void decode(String encoding, int startPosition, int currPosition,
-			boolean prevDigitDecoded, LinkedList<String> decodings, List<List<String>> solutions) {
+			boolean prevDigitDecoded, LinkedList<String> decodings, Set<String> solutions) {
 
 		
 		List<String> decoding;
@@ -29,9 +30,7 @@ public class PhoneNumber {
 		if (startPosition >= encoding.length()) {
 			// start is past end of string
 			// Display solution
-			solutions.add(new ArrayList<String>(decodings));
-			
-//			this.displaySolution(rawNumber, decodings);
+			solutions.add(formatSolution(decodings));
 
 		} else if (currPosition >= encoding.length()) {
 			
@@ -43,9 +42,8 @@ public class PhoneNumber {
 					decodings.add(currDecoding);
 
 					
-					solutions.add(new ArrayList<String>(decodings));
-					// Display solution
-//					this.displaySolution(rawNumber, decodings);
+					solutions.add(formatSolution(decodings));
+
 					
 					// remove the last encoding
 					decodings.removeLast();				
@@ -93,16 +91,15 @@ public class PhoneNumber {
 		
 	}
 	
-	public static void displaySolutions(String rawNumber, List<String> decodings) {
-		System.out.print(rawNumber + ": ");
-		
+	private static String formatSolution(List<String> solution) {
 		StringBuilder result = new StringBuilder();
 		
-		for (String value : decodings) {
+		for (String value : solution) {
 			result.append(value);
 			result.append(" ");
 		}
 		
-		System.out.println(result.subSequence(0, result.length() - 1));
+		return result.subSequence(0, result.length() - 1).toString();
 	}
+
 }

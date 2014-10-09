@@ -63,8 +63,8 @@ public class Driver {
 		PhoneNumber num = new PhoneNumber(pnd);
 		
 		for (String currNum: numbers) {
-			for (List<String> solution : num.decode(currNum) ) {
-				PhoneNumber.displaySolutions(currNum, solution);
+			for (String solution : num.decode(currNum) ) {
+				System.out.println(currNum + ": " + solution);
 			}
 		}
 		

@@ -3,12 +3,10 @@ package com.threeSixtyT;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
-
-import org.junit.Assert;
 
 public class PhoneNumberTest {
 
@@ -45,47 +43,22 @@ public class PhoneNumberTest {
 		
 		
 		// Create the expected results
-		List<String> expected = new LinkedList<String>(Arrays.asList(MAPPING));
+		Set<String> expected = new HashSet<String>(Arrays.asList(MAPPING));
 		
 		
-		List<String> actual = new LinkedList<String>();
+		Set<String> actual = new HashSet<String>();
 		
+		// Initialize the phone number object
 		PhoneNumber number = new PhoneNumber(dictionary);
 		
 
 		for (String currNumber : PHONE_NUMBERS) {
-			for (List<String> solution : number.decode(currNumber)) {
-				actual.add(formatOutput(currNumber, solution));
+			for (String solution : number.decode(currNumber)) {
+				actual.add(currNumber + ": " + solution);
 			}
 		}
 		assertEquals(expected, actual);
 		
 	}
 	
-	
-	public void assertEquals(List<String> expected, List<String> actual) {
-		if (expected.size() != actual.size()) {
-			Assert.fail();
-		}
-		
-		for( String element: expected) {
-			if (!actual.contains(element)) {
-				Assert.fail();
-			}
-		}
-	}
-	
-	public static String formatOutput(String number, List<String> solution) {
-		
-		StringBuilder result = new StringBuilder();
-		result.append(number).append(": ");
-		
-		for (String value : solution) {
-			result.append(value);
-			result.append(" ");
-		}
-		
-		return result.subSequence(0, result.length() - 1).toString();
-	}
-
 }
