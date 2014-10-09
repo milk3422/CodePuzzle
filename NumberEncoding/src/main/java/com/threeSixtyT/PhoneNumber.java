@@ -15,8 +15,9 @@ public class PhoneNumber {
 	public Set<String> decode(String number) {
 		Set<String> solutions = new HashSet<String>();
 		
-		
-		this.decode(number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>(), solutions);
+		if (number != null && !number.isEmpty()) {
+			this.decode(number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>(), solutions);
+		}
 		
 		return solutions;
 	}

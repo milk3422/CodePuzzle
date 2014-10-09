@@ -1,6 +1,7 @@
 package com.threeSixtyT;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -41,54 +42,157 @@ public class PhoneNumberTest {
 			"10/783--5: je Bo\" da", "381482: so 1 Tor", "04824: 0 Torf",
 			"04824: 0 fort", "04824: 0 Tor 4" };
 
-	
-	/** A {@code PhoneNumberDictionary} that is being tested */
+	/** A {@code PhoneNumberDictionary} to hold words */
 	public PhoneNumberDictionary dictionary;
 
+	/** A {@code PhoneNumber} that is being tested */
+	public PhoneNumber number;
+
 	/**
-	 * Initialize the dictionary before each test
+	 * Initialize the phone number and dictionary before each test
 	 */
 	@Before
 	public void Initialize() {
 		dictionary = new PhoneNumberDictionary(CHARACTER_MAPPING);
+		number = new PhoneNumber(dictionary);
 	}
-	
-	
 
-	
 	/**
-	 * Perform a full test using a German Dictionary
+	 * Test an empty set is returned when a number cannot be matched
+	 */
+	@Test
+	public void noMatch() {
+		assertTrue("A test on an empty dictionary should return an empty set",
+				number.decode("5").isEmpty());
+	}
+
+	/**
+	 * Match a single word in a dictionary with a single word
+	 */
+	@Test
+	public void simpleMatch() {
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo" };
+		String expectedEncoding = "488";
+
+		// Add the words to the expected results
+		expected.addAll(Arrays.asList(words));
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("'foo' should be the only word returned", expected,
+				number.decode(expectedEncoding));
+	}
+
+	/**
+	 * Match multiple forms of a single word
+	 */
+	@Test
+	public void multipleMatch() {
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo", "f\"oo", "fo\"o", "\"foo" };
+		String expectedEncoding = "488";
+
+		// Add the words to the expected results
+		expected.addAll(Arrays.asList(words));
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("Various forms of 'foo', should be retuned", expected,
+				number.decode(expectedEncoding));
+	}
+
+	/**
+	 * Match a valid leading digit
 	 */
 	@Test
 	public void validLeadingDigit() {
-		
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo" };
+		String expectedEncoding = "9488";
+
+		// Add the words to the expected results
+		expected.add("9 foo");
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("'9 foo' should be returned", expected,
+				number.decode(expectedEncoding));
 	}
-	
+
 	/**
-	 * Perform a full test using a German Dictionary
+	 * Ensure a digit is not inserted at the first positions, where can be
+	 * decoded
 	 */
 	@Test
 	public void invalidLeadingDigit() {
-		
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo", "ffoo" };
+		String expectedEncoding = "4488";
+
+		// Add the words to the expected results
+		expected.add("ffoo");
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("'ffoo' should be returned", expected,
+				number.decode(expectedEncoding));
 	}
-	
+
 	/**
-	 * Perform a full test using a German Dictionary
+	 * Ensure a trailing digit is inserted correctly
 	 */
 	@Test
 	public void validTrailingDigit() {
-		
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo" };
+		String expectedEncoding = "4889";
+
+		// Add the words to the expected results
+		expected.add("foo 9");
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("'foo 9' should be returned", expected,
+				number.decode(expectedEncoding));
 	}
-	
+
 	/**
-	 * Perform a full test using a German Dictionary
+	 * Ensure invalid characters are handled properly
 	 */
 	@Test
 	public void numbersWithInvalidCharacters() {
-		
+		Set<String> expected = new HashSet<String>();
+		String[] words = { "foo" };
+		String expectedEncoding = "/4--8/8";
+
+		// Add the words to the expected results
+		expected.add("foo");
+
+		// Populate the dictionary
+		for (String word : words) {
+			dictionary.put(word);
+		}
+
+		assertEquals("Invalid characters should be removed", expected,
+				number.decode(expectedEncoding));
 	}
-	
-	
+
 	/**
 	 * Perform a full test using a German Dictionary
 	 */
