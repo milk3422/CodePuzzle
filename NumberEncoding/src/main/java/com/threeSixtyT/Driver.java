@@ -26,9 +26,13 @@ public class Driver {
 		PhoneNumberDictionary pnd = new PhoneNumberDictionary(NUMBER_MAPPING);
 		
 		pnd.put("b");
-		pnd.put("ab");
+		pnd.put("b\"");
+		pnd.put("A\"B");
 		pnd.put("a");
+		pnd.put("a\"");
 		pnd.put("ba");
+		pnd.put("z");
+		pnd.put("ac");
 		
 //		for (String word: pnd.get("5")) {
 //			System.out.println("Found: " + word);
@@ -40,7 +44,7 @@ public class Driver {
 
 		PhoneNumber num = new PhoneNumber(pnd);
 		
-		num.decode("05759");
+		num.decode("0-");
 		
 		
 		
@@ -165,81 +169,6 @@ public class Driver {
 //			System.out.println(s1 + " not in Word Tree");
 //		}
 		
-	}
-	
-	public static void generateCombination(
-			LinkedList<Map.Entry<List<String>, String>> combinations, 
-			String num, 
-			String[] mapping, WordTree dictionary) {
-
-		// Hold all of the new possible combinations
-		LinkedList<Map.Entry<List<String>, String>> newCombinations = new LinkedList<Map.Entry<List<String>, String>>();
-		
-		// If the list of combinations is empty it must get populated for the first time
-		if (combinations.isEmpty()) {
-			
-			for(int i = 0; i < mapping[Integer.valueOf(num)].length(); i++) {
-				
-				// Get the current value
-				String currComb = mapping[Integer.valueOf(num)].substring(i, i+1);
-				
-				if (dictionary.containsPrefix(currComb)) {
-					
-					// Add the new combination
-					newCombinations.add(new AbstractMap.SimpleEntry<List<String>, String>(new LinkedList<String>(), currComb));
-					
-					// Iterate through the dictionary and insert any word available
-					for (String word : dictionary.get(currComb)) {
-
-						
-						// Add the new combination
-						List<String> possibleWords = new LinkedList<String>();
-						possibleWords.add(word);
-						newCombinations.add(new AbstractMap.SimpleEntry<List<String>, String>(possibleWords, ""));
-					}
-				}
-			}
-		} else {
-			
-			for (Map.Entry<List<String>, String> currElement : combinations) {
-				for (int i = 0; i < mapping[Integer.valueOf(num)].length(); i++) {
-					
-					// Build the new combination
-					String currComb = currElement.getValue() + mapping[Integer.valueOf(num)].substring(i, i+1);
-					
-					
-					if (dictionary.containsPrefix(currComb)) {
-								
-						// Add the new combination
-						newCombinations.add(new AbstractMap.SimpleEntry<List<String>, String>(currElement.getKey(), currComb));
-	
-						
-						// Iterate through the dictionary and insert any word available
-						for (String word : dictionary.get(currComb)) {
-							
-
-							// Add the new combination
-							List<String> possibleWords = new LinkedList<String>(currElement.getKey());
-							possibleWords.add(word);
-
-							newCombinations.add(new AbstractMap.SimpleEntry<List<String>, String>(possibleWords, ""));
-							
-						}
-					} else if (currComb.length() <= 1) {
-						// Add the new combination
-						newCombinations.add(new AbstractMap.SimpleEntry<List<String>, String>(currElement.getKey(), currComb));
-					}
-				}
-
-			}
-			
-			// Clear the old list of possible combinations
-			combinations.clear();
-			
-		}
-		
-		// Add all of the new possible combinations
-		combinations.addAll(newCombinations);		
 	}
 
 }

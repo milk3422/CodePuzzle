@@ -11,11 +11,11 @@ public class PhoneNumber {
 	}
 
 	public void decode(String number) {
-		this.decode(number, 0, 1, true, new LinkedList<String>());
+		this.decode(number, number.replaceAll("[^0-9]", ""), 0, 1, true, new LinkedList<String>());
 	}
 
-	private void decode(String encoding, int startPosition, int currPosition,
-			boolean prevDigitDecoded, List<String> decodings) {
+	private void decode(String rawNumber, String encoding, int startPosition, int currPosition,
+			boolean prevDigitDecoded, LinkedList<String> decodings) {
 
 		
 		List<String> decoding;
@@ -23,32 +23,35 @@ public class PhoneNumber {
 		if (startPosition >= encoding.length()) {
 			// start is past end of string
 			// Display solution
-			this.displaySolution(encoding, decodings);
+			this.displaySolution(rawNumber, decodings);
 
 		} else if (currPosition >= encoding.length()) {
 			
 			// If there is a match, there is a solution
 			if ( (decoding = this.pnd.get(encoding.substring(startPosition, currPosition))) != null ) {
 				
-				// Add solution to decodings
-				decodings.add(decoding.get(0));
+				for (String currDecoding : decoding) {
+					// Add solution to decodings
+					decodings.add(currDecoding);
 
-				// Display solution
-				this.displaySolution(encoding, decodings);
-				
-				// remove encodings
-				decodings.remove(decoding.get(0));
+					// Display solution
+					this.displaySolution(rawNumber, decodings);
+					
+					// remove the last encoding
+					decodings.removeLast();				
+				}
 
-			} else if (prevDigitDecoded) {
+			} else if (prevDigitDecoded && encoding.length() > 1) {
 				// There is no match either a digit should be inserted or an
 				// insert digit at start position
 				decodings.add(String.valueOf(encoding.charAt(startPosition)));
 				
 				// call 
 				// Need to add solution 
-				this.decode(encoding, startPosition+1, startPosition+2, false, decodings);
+				this.decode(rawNumber, encoding, startPosition+1, startPosition+2, false, decodings);
 				
-				decodings.remove(String.valueOf(encoding.charAt(startPosition)));
+				// Remove the last encoding
+				decodings.removeLast();
 
 			} 
 			
@@ -56,32 +59,33 @@ public class PhoneNumber {
 			
 			// Determine if a match occurred
 			if ( (decoding = this.pnd.get(encoding.substring(startPosition, currPosition))) != null ) {
-//				decodings.add(decoding.get(0));
-//				this.decode(encoding, startPosition+1, startPosition+2, true, decodings);
-//				
-//				decodings.remove(decoding.get(0));
-//				
-//				this.decode(encoding, startPosition, currPosition+1, false, decodings);
-				
-				decodings.add(decoding.get(0));
-				this.decode(encoding, currPosition, currPosition+1, true, decodings);
-				
-				decodings.remove(decoding.get(0));
-				
-				this.decode(encoding, startPosition, currPosition+1, false, decodings);
-				
 
+				for (String currDecoding : decoding) {
+					// Add solution to decodings
+					decodings.add(currDecoding);
+
+					// 
+					this.decode(rawNumber, encoding, currPosition, currPosition+1, true, decodings);
+					
+					// Remove the last encoding
+					decodings.removeLast();
+				
+				}
+				
+				this.decode(rawNumber, encoding, startPosition, currPosition+1, false, decodings);
+				
 			} else {
 				// Need to add solution 
-				this.decode(encoding, startPosition, currPosition+1, prevDigitDecoded, decodings);				
+				this.decode(rawNumber, encoding, startPosition, currPosition+1, prevDigitDecoded, decodings);				
 			}
 			
 		}
 		
 	}
 	
-	private void displaySolution(String encoding, List<String> decodings) {
-		System.out.print("encoding: ");
+	
+	private void displaySolution(String rawNumber, List<String> decodings) {
+		System.out.print(rawNumber + ": ");
 		
 		StringBuilder result = new StringBuilder();
 		
@@ -91,6 +95,5 @@ public class PhoneNumber {
 		}
 		
 		System.out.println(result.subSequence(0, result.length() - 1));
-		
 	}
 }

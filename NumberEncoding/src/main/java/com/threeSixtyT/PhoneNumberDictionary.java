@@ -57,9 +57,4 @@ public class PhoneNumberDictionary {
 		
 		return this.dictionary.get(value);
 	}
-	
-	public boolean contains(String value) {
-		return this.dictionary.containsKey(value);
-	}
-	
 }
