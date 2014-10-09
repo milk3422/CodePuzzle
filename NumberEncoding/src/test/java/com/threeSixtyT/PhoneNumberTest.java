@@ -6,59 +6,123 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * A class to ensure the {@code PhoneNumber} object is functioning properly.
+ * 
+ * @author Zachary Radtka
+ */
 public class PhoneNumberTest {
 
-	public static final String[] NUMBER_MAPPING = {
-		"e", "jnq", "rwx", "dsy", "ft", "am", "civ", "bku", "lop", "ghz"
-	};
-	
+	/** A mapping of characters to corresponding numbers */
+	public static final String[] CHARACTER_MAPPING = { "e", "jnq", "rwx",
+			"dsy", "ft", "am", "civ", "bku", "lop", "ghz" };
+
+	/** German words used as a sample dictionary */
 	public static final String[] GERMAN_DICTIONARY = { "an", "blau", "Bo\"",
 			"Boot", "bo\"s", "da", "Fee", "fern", "Fest", "fort", "je",
 			"jemand", "mir", "Mix", "Mixer", "Name", "neu", "o\"d", "Ort",
 			"so", "Tor", "Torf", "Wasser" };
 
-	public static final String[] PHONE_NUMBERS = { "112", "5624-82", "4824",
-			"0721/608-4067", "10/783--5", "1078-913-5", "381482", "04824" };
+	/** A set of sample phone numbers */
+	public static final String[] SAMPLE_PHONE_NUMBERS = { "112", "5624-82",
+			"4824", "0721/608-4067", "10/783--5", "1078-913-5", "381482",
+			"04824" };
 
-	public static final String[] MAPPING = { "5624-82: mir Tor",
+	/**
+	 * The expected result of the {@link #SAMPLE_PHONE_NUMBERS} ran over the
+	 * {@link #GERMAN_DICTIONARY}
+	 */
+	public static final String[] EXPEXTED_RESULT = { "5624-82: mir Tor",
 			"5624-82: Mix Tor", "4824: Torf", "4824: fort", "4824: Tor 4",
 			"10/783--5: neu o\"d 5", "10/783--5: je bo\"s 5",
 			"10/783--5: je Bo\" da", "381482: so 1 Tor", "04824: 0 Torf",
 			"04824: 0 fort", "04824: 0 Tor 4" };
 
+	
+	/** A {@code PhoneNumberDictionary} that is being tested */
+	public PhoneNumberDictionary dictionary;
+
 	/**
-	 * Ensure that a newly initialized dictionary is empty
+	 * Initialize the dictionary before each test
+	 */
+	@Before
+	public void Initialize() {
+		dictionary = new PhoneNumberDictionary(CHARACTER_MAPPING);
+	}
+	
+	
+
+	
+	/**
+	 * Perform a full test using a German Dictionary
+	 */
+	@Test
+	public void validLeadingDigit() {
+		
+	}
+	
+	/**
+	 * Perform a full test using a German Dictionary
+	 */
+	@Test
+	public void invalidLeadingDigit() {
+		
+	}
+	
+	/**
+	 * Perform a full test using a German Dictionary
+	 */
+	@Test
+	public void validTrailingDigit() {
+		
+	}
+	
+	/**
+	 * Perform a full test using a German Dictionary
+	 */
+	@Test
+	public void numbersWithInvalidCharacters() {
+		
+	}
+	
+	
+	/**
+	 * Perform a full test using a German Dictionary
 	 */
 	@Test
 	public void fullTest() {
-		// Create a new dictionary
-		PhoneNumberDictionary dictionary = new PhoneNumberDictionary(NUMBER_MAPPING);
-		
-		// Add words to the dictionary
+
+		// Define the expected and actual sets
+		Set<String> actual;
+		Set<String> expected;
+
+		// Load the expected results
+		expected = new HashSet<String>(Arrays.asList(EXPEXTED_RESULT));
+
+		// Add German words to the dictionary
 		for (String currWord : GERMAN_DICTIONARY) {
 			dictionary.put(currWord);
 		}
-		
-		
-		// Create the expected results
-		Set<String> expected = new HashSet<String>(Arrays.asList(MAPPING));
-		
-		
-		Set<String> actual = new HashSet<String>();
-		
+
+		// Initialize the actual results
+		actual = new HashSet<String>();
+
 		// Initialize the phone number object
 		PhoneNumber number = new PhoneNumber(dictionary);
-		
 
-		for (String currNumber : PHONE_NUMBERS) {
+		// Iterate over the phone numbers, adding the solutions to the set of
+		// solutions
+		for (String currNumber : SAMPLE_PHONE_NUMBERS) {
 			for (String solution : number.decode(currNumber)) {
 				actual.add(currNumber + ": " + solution);
 			}
 		}
+
+		// Compare the actual and expected solutions
 		assertEquals(expected, actual);
-		
 	}
-	
+
 }

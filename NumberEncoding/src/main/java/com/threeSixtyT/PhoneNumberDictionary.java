@@ -1,9 +1,9 @@
 package com.threeSixtyT;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@code dictionary} designed to hold mappings between numbers and words.
@@ -16,11 +16,11 @@ import java.util.Map;
  */
 public class PhoneNumberDictionary {
 	
-	/** The required amount of number that contain mappings */
+	/** The required amount of numbers that contain mappings */
 	private final int NUM_COUNT = 10;
 	
 	/** A multimap of strings to words */
-	private final Map<String, List<String>> dictionary;
+	private final Map<String, Set<String>> dictionary;
 	
 	/** A mapping of characters to numbers */
 	private final Map<Character, String> characterMapping;
@@ -47,7 +47,7 @@ public class PhoneNumberDictionary {
 		}
 		
 		// Initialize the internal dictionary and the character mapping
-		this.dictionary = new HashMap<String, List<String>>();
+		this.dictionary = new HashMap<String, Set<String>>();
 		this.characterMapping = new HashMap<Character, String>();
 
 		// Build the character mapping from the supplied mapping
@@ -105,12 +105,12 @@ public class PhoneNumberDictionary {
 		}
 		
 		// Get the list of words currently being held for this encoding
-		List<String> currentWords = this.dictionary.get(encodedValue.toString());
+		Set<String> currentWords = this.dictionary.get(encodedValue.toString());
 		
 		// If no words are being held for the current encoding, create a new
 		// list to hold this and future encodings
 		if (currentWords == null) {
-			this.dictionary.put(encodedValue.toString(), currentWords = new LinkedList<String>());
+			this.dictionary.put(encodedValue.toString(), currentWords = new HashSet<String>());
 		}
 		
 		// Add the current value to this encoding
@@ -124,11 +124,11 @@ public class PhoneNumberDictionary {
 	 * @param value
 	 * 			A {@code String} of digits whose associated values is to be 
 	 * 			returned
-	 * @return A {@code List} of words to which the specified value is mapped, 
+	 * @return A {@code Set} of words to which the specified value is mapped, 
 	 * or {@code null} if this dictionary contains no mapping for the specified 
 	 * value
 	 */
-	public List<String> get(String value) {
+	public Set<String> get(String value) {
 		return this.dictionary.get(value);
 	}
 }

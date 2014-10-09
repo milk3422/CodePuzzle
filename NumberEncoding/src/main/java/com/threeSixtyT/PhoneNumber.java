@@ -25,7 +25,7 @@ public class PhoneNumber {
 			boolean prevDigitDecoded, LinkedList<String> decodings, Set<String> solutions) {
 
 		
-		List<String> decoding;
+		Set<String> decoding;
 
 		if (startPosition >= encoding.length()) {
 			// start is past end of string
