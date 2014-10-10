@@ -7,9 +7,7 @@ import java.util.Set;
 
 /**
  * A {@code dictionary} designed to hold mappings between numbers and words.
- * 
  * <p>This implementation guarantees a O(1) cost for insertion and retrieval.
- * 
  * <p>The current implementation <b>does not</b> support the removal of words. 
  * 
  * @author Zachary Radtka
