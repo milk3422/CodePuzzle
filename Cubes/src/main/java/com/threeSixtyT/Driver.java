@@ -58,9 +58,7 @@ public class Driver {
 			System.exit(1);
 		}
 
-		
 		Cube cube = new Cube(inputCube);
-
 
 		cube.solve();
 
