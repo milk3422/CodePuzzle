@@ -83,7 +83,7 @@ public class Cube {
 		
 		
 		// If no match rotate the shape
-		if (numRotation < remainingSides.get(index).getNumSupportedRotations()) {
+		if (numRotation < remainingSides.get(index).getNumAllowedRotations()) {
 	
 			// Rotate the shape to its right
 			remainingSides.get(index).rotateRight();

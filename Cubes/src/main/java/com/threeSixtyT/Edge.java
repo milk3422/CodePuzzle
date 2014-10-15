@@ -2,10 +2,20 @@ package com.threeSixtyT;
 
 import java.util.Arrays;
 
+/**
+ * The Edge is designed to hold an edge of a shape and contains the ability
+ * to compare edges of shapes.
+ * 
+ * @author Zachary Radtka
+ */
 public class Edge {
 
+	/** The length of the edge */
 	private final int length;
+	
+	/** The edge represented as an array of {@code Boolean} */
 	private Boolean[] edge;
+	
 	
 	public Edge(String edge) {
 		this.length = edge.length();
@@ -95,6 +105,12 @@ public class Edge {
 		}
 	}
 	
+	/**
+	 * Determines if the Edge is symmetrical. A symmetrical edge is one that 
+	 * equal to itself forwards and backwards.
+	 * 
+	 * @return {@code true} if the edge is symmetrical, {@code false} otherwise
+	 */
 	public boolean isSymmetrical() {
 		for (int i=0; i < this.length/2; i++) {
 			if (this.edge[i] ^ this.edge[this.length - (1+i)]){
@@ -104,6 +120,12 @@ public class Edge {
 		return true;
 	}
 	
+	/**
+	 * Perform an in place reversal of an array.
+	 * 
+	 * @param array
+	 * 			An array of {@code Boolean} to be reversed
+	 */
 	private static void reverse(Boolean[] array) {
 		for (int i=0; i < array.length/2; i++) {
 			Boolean tmp = array[array.length - (1+i)];
@@ -111,7 +133,5 @@ public class Edge {
 			array[i] = tmp;
 		}
 	}
-	
-	
-	
+
 }
