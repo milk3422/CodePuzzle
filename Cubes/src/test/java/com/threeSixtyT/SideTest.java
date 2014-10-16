@@ -4,6 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * A class to ensure the {@code Side} object is functioning properly.
+ * 
+ * @author Zachary Radtka
+ */
 public class SideTest {
 
 	/** A fully symmetrical shape */
@@ -45,9 +50,7 @@ public class SideTest {
 		"11110",
 		"01111",
 		"00110"};
-	
 
-	
 	/**
 	 * Ensure the top edge is returned correctly
 	 */
@@ -89,7 +92,7 @@ public class SideTest {
 	}
 	
 	/**
-	 * Ensure rotation works correctly
+	 * Ensure clockwise rotation works correctly
 	 */
 	@Test
 	public void rotateRightTest() {
@@ -107,7 +110,7 @@ public class SideTest {
 	}
 	
 	/**
-	 * Ensure rotation works correctly
+	 * Ensure counterclockwise rotation works correctly
 	 */
 	@Test
 	public void rotateLeftTest() {
@@ -123,41 +126,40 @@ public class SideTest {
 				&& shape.getBottomEdge().equals(expectedBottom)
 				&& shape.getLeftEdge().equals(expectedLeft));
 	}
-	
 
-	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that symmetrical shapes are correctly detected
 	 */
 	@Test
 	public void isFullySymmetricalTest0() {
 		
 		Side shape = new Side(SYMMETRICAL_SHAPE);
-		assertTrue(shape.isFullySymmetrical());
+		assertTrue("The shape is fully symmetrical", shape.isFullySymmetrical());
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that symmetrical shapes are correctly detected
 	 */
 	@Test
 	public void isFullySymmetricalTest1() {
 		
 		Side shape = new Side(FULL_ROTATION_SHAPE);
-		assertFalse(shape.isFullySymmetrical());
+		assertFalse("The shape is not fully symmetrical", shape.isFullySymmetrical());
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that symmetrical shapes are correctly detected
 	 */
 	@Test
 	public void isFullySymmetricalTest2() {
 		
 		Side shape = new Side(HALF_SYMMETRICAL_SHAPE);
-		assertFalse(shape.isFullySymmetrical());
+		assertFalse("The shape not is fully symmetrical", 
+				shape.isFullySymmetrical());
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that symmetrical shapes are correctly detected
 	 */
 	@Test
 	public void isPartiallySymmetricalTest0() {
@@ -167,48 +169,51 @@ public class SideTest {
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that symmetrical shapes are correctly detected
 	 */
 	@Test
 	public void isPartiallySymmetricalTest1() {
 		
 		Side shape = new Side(FULL_ROTATION_SHAPE);
-		assertFalse(shape.isPartiallySymmetrical());
+		assertFalse("The shape is not partially symmetrical", 
+				shape.isPartiallySymmetrical());
 	}
 
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that containsReflection functions properly
 	 */
 	@Test
 	public void containsReflectionTest0() {
 		
 		Side shape = new Side(HORIZONTAL_MIRROR_SHAPE);
-		assertTrue(shape.containsReflection());
+		assertTrue("The shape contains a reflection", 
+				shape.containsReflection());
 	}
 	
-	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that containsReflection functions properly
 	 */
 	@Test
 	public void containsReflectionTest1() {
 		
 		Side shape = new Side(VERTICAL_MIRROR_SHAPE);
-		assertTrue(shape.containsReflection());
+		assertTrue("The shape contains a reflection", 
+				shape.containsReflection());
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure that containsReflection functions properly
 	 */
 	@Test
 	public void containsReflectionTest2() {
 		
 		Side shape = new Side(SYMMETRICAL_SHAPE);
-		assertFalse(shape.containsReflection());
+		assertFalse("The shape does not contain a reflection", 
+				shape.containsReflection());
 	}
 	
 	/**
-	 * Ensure the left edge is returned correctly
+	 * Ensure getSide functions correctly
 	 */
 	@Test
 	public void getSideTest() {
@@ -223,7 +228,9 @@ public class SideTest {
 		assertArrayEquals(expected, shape.getSide());
 	}
 
-	
+	/**
+	 * Ensure flip functions correctly
+	 */
 	@Test
 	public void flipTest() {
 		String[] expected = {
@@ -237,6 +244,5 @@ public class SideTest {
 		shape.flip();
 		assertArrayEquals(expected, shape.getSide());
 	}
-
 	
 }

@@ -106,6 +106,30 @@ public class Side {
 	}
 	
 	/**
+	 * Initialize a new Side by specifying a previously defined side
+	 * 
+	 * @param original
+	 * 		The {@code Side} to copy
+	 */
+	public Side(Side original) {
+		
+		// Set the side's dimensions
+		this.dimension = original.dimension;
+		
+		// Set the number of supported rotations
+		this.numSupportedRotations = original.numSupportedRotations;
+		
+		// Set if the flip is allowed
+		this.flipAllowed = original.flipAllowed;
+		
+		// Set all of the edges
+		this.top = new Edge(original.top);		
+		this.right = new Edge(original.right);		
+		this.bottom = new Edge(original.bottom);
+		this.left = new Edge(original.left);
+	}
+
+	/**
 	 * Returns the dimension of the side. 
 	 * 
 	 * @return The length of a side
